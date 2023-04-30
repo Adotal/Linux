@@ -1,0 +1,38 @@
+Instalar snapd/snap (administrador de paquetes)
+
+*Instalar GIT:
+#sudo pacman -S git
+
+Clonar repositorio:
+#git clone https://aur.archlinux.org/snapd.git
+
+Ir al directorio del paquete clonado:
+# cd snapd
+
+Construya el paquete. Después de confirmar manualmente el contenido de los archivos, ejecute makepkg como un usuario normal:
+
+$ makepkg -si
+
+    -s/--syncdeps resuelve e instala automáticamente cualquier dependencia con pacman antes de compilar. Si el paquete depende de otros paquetes de AUR, deberá primero instalarlos manualmente.
+    -i/--install instala el paquete si está compilado correctamente. En otro caso, el paquete compilado se puede instalar con pacman -U package.pkg.tar.xz.
+
+Otros indicadores útiles son:
+
+    -r/--rmdeps elimina las dependencias de compilación después de la compilación, ya que las mismas no serán necesarias. Sin embargo, es posible que estas dependencias tengan que reinstalarse la próxima vez que se actualice el paquete.
+    -c/--clean limpia los archivos de compilación temporales después de la compilación, ya que no serán necesarios. Estos archivos generalmente solo se necesitan al depurar el proceso de compilación.
+    
+ Iniciar servicio snap:
+ # sudo systemctl enable --now snapd.socket   
+ 
+To enable classic snap support, enter the following to create a symbolic link between /var/lib/snapd/snap and /snap:
+
+sudo ln -s /var/lib/snapd/snap /snap
+
+Either log out and back in again, or restart your system, to ensure snap’s paths are updated correctly.
+
+    
+Si está usando AppArmor:
+ $ systemctl enable --now apparmor.service
+ $ systemctl enable --now snapd.apparmor.service
+
+

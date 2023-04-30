@@ -1,0 +1,8 @@
+INSTALACIÓN DE GRUB EN PROCESO DE INSTALACIÓN DE ARCH:
+
+#grub-install --target=x86_64-efi --efi-directory=/boot/ --bootloader-id=Arch
+#grub-install --target=x86_64-efi --efi-directory=/boot/ --removable
+
+#grub-mkconfig -o /boot/grub/grub.cfg
+
+#mkinitcpio -P

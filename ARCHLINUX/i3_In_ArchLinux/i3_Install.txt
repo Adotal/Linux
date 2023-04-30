@@ -1,0 +1,14 @@
+instalar: "Todo lo relacionado con X xorg"i3 dmenu lightdm lightdm-gtk-greeter
+systemctl enable lightdm
+Instalar todos los paquetes i3 y dmenu:
+ELEGIR LA TECLA WINDOWS COMO $mod
+
+
+El archivo i3config VA EN:  ~.config/i3/config (CAMBIAR NOMBRE DE "i3config" a "config")
+
+
+EL ARCHIVO picom.conf en /etc/xdg/picom.conf
+.bashrc en /home/.bashrc
+EL ARCHIVO nanorc va en /etc/nanorc
+
+

@@ -1,0 +1,470 @@
+Instalar Archlinux - BIOS LEGACY
+
+Iniciamos el liveCD en modo ROOT (Admintrador) para empezar a descargar los programas necesarios que vamos a usar y realizar configuraciones básicas
+
+Pre-instalación
+Establecer distribución del teclado temporal para que reconozca todos los caracteres
+Ponemos nuestro teclado para Español
+root@archiso ~ # loadkeys es
+
+Ponemos nuestro teclado para LatinoAmerica
+root@archiso ~ # loadkeys la-latin1
+
+Ponemos nuestro teclado para Americano
+root@archiso ~ # loadkeys us
+
+Conéctese a Internet (Ethernet)
+Se recomienda usar la conexión por cable en ves de la inalámbrica, para mayor estabilidad y velocidad del Internet.
+Para conexión por cable tan solo es necesario tener conectado el cable de Ethernet.
+Luego hacer un ping para verificar la conexión a Internet.
+
+root@archiso ~ # ping -c 3 archlinux.org
+/*El parámetro -c 3 establece que se ejecute ping tres veces.
+/*Por defecto en la ISO habilita el servicio de dhcpcd para el uso de red cableada
+
+Si falló al hacer el ping es probable que haya conectado el cable Ethernet luego de haber iniciado el live usb, por eso lo normal es que el servicio dhcpcd no se haya iniciado correctamente, así que vamos a iniciar el servicio.
+root@archiso ~ # systemctl start dhcpcd
+Ahora verifique que el cable Ethernet está bien conectado y vuelva a hacer un ping.
+root@archiso ~ # ping -c 3 archlinux.org
+
+Conéctese a Internet (Wifi)
+
+Si desea conectarse por wifi, es conveniente primero verificar si se ha cargado correctamente el controlador de la tarjeta wifi. Compruebe que en la salida del siguiente comando exista un fichero que inicie con la letra wl...
+
+wlan0
+wlp2s0
+Otros...
+root@archiso ~ # ls /sys/class/net
+Si no existe ningún fichero que inicie con la letra wl ,entonces no podrá realizar la instalación vía wifi, si no solo vía cable ethernet.
+Si por el contrario el fichero existe entonces será posible conectarse a Internet vía wifi.
+
+Estaremos usando dos programas de terminal:
+IWD
+root@archiso ~ # systemctl enable --now iwd
+root@archiso ~ # iwctl --passphrase 'password' station wlan0 connect 'nombre-de-red'
+
+NMCLI
+root@archiso ~ # nmcli dev wifi -a connect 'nombre-de-red' password 'password'
+
+Ambas opciones son válidas para conectarse a wifi
+Wifi - Red oculta (opcional)
+Para redes ocultas usaremos la herramienta wpa_supplicant, teniendo en cuenta el nombre del dispositivo, ssid y password.
+root@archiso ~ # nano /etc/wpa_supplicant/wpa_supplicant.conf
+Agregamos el siguiente texto
+network={
+ssid="Familia Hernández"
+scan_ssid=1
+key_mgmt=WPA-PSK
+psk="password"
+}
+
+Ahora levantamos la red.
+root@archiso ~ # wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+
+Idioma del liveCD (opcional)
+Vamos a configurar el idioma temporal de las herramientas disponibles a nuestro idioma español, sobre todo las de particionado.
+
+	root@archiso ~ # echo "es_ES.UTF-8 UTF-8" > /etc/locale.gen
+	Ahora vamos a generar la configuración regional.
+
+	root@archiso ~ # locale-gen
+	Exportamos la variable LANG para finalizar la configuración regional temporal.
+
+	root@archiso ~ # export LANG=es_ES.UTF-8
+
+	Actualizar reloj del sistema (opcional)
+	root@archiso ~ # timedatectl set-ntp true
+
+Verificamos el modo de arranque
+Verificamos si la placa base es compatible con UEFI, consultando si existe el directorio especificado y mostrando resultado con archivos existentes, caso contrario de no mostrar información ni archivos el arranque solo es compatible con BIOS/Legacy.
+
+	root@archiso ~ # ls /sys/firmware/efi/efivars
+	Tabla de partición (UEFI o BIOS/Legacy)
+	Existen dos tablas de particiones disponibles para usar, MBR/dos o GPT
+	>> MRB/dos para tarjetas madre compatibles con BIOS/Legacy.
+	>> GPT para tarjetas madre compatibles con EFI y UEFI.
+
+	UEFI = Tabla de partición GPT
+	BIOS = Tabla de partición MBR/dos
+
+Para consultar la tabla de particiones que tiene su disco duro donde va a instalar el Sistema Operativo use el siguiente comando.
+
+	root@archiso ~ # fdisk -l
+
+
+	/*Es importante saber cual es la ruta de nuestro almacenamiento
+	/*Los resultados que terminan en [rom, loop o airoot] pueden ignorarse.
+	/*En este caso /dev/loop0 es la imagen ISO de ArchLinux.
+
+Crear las particiones
+>> Arch Linux incluye las siguientes herramientas de particionado:
+
+
+
+/*cfdisk es para crear particiones nuevas dependiendo nuestra necesidades
+/*Fuente: https://wiki.archlinux.org/index.php/Partitioning
+
+>> Estructura de ficheros en Linux
+
+Debemos saber que de root nacen las demás carpetas
+La ventaja que Linux permite asignarle una partición para cada carpeta
+Podemos tener /boot/ en una partición
+Podemos tener /home/ en otra partición
+
+/home/ la carpeta HOME guarda los archivos de todos los usuarios algo parecido a un DISCO D: de windows
+Todo depende si queremos tenerlo separado en otra partición
+
+Lo cual puede ser bueno o malo, depende de las necesidades del usuario
+
+
+Tabla de Disco MBR / dos - Master Boot Record
+Disponible 4 particiones primarias
+
+	>> La documentación oficial nos recomienda usar en MBR la siguiente estructura:
+
+	/dev/sda1  ROOT
+	/dev/sda2  [SWAP]
+	/dev/sda3  HOME
+
+	>> Memoria SWAP
+	Menos de 1GB RAM física >> 2GB de SWAP
+	Entre 2GB a 4GB RAM física >> 2GB a 4GB de SWAP
+	8GB de RAM física >> 4GB de SWAP
+	Más de 8GB de RAM física >> 2GB a 4GB de SWAP
+
+	Entendido esos conceptos ejecutamos fdisk o cfdisk
+
+	root@archiso ~ # fdisk /dev/sda
+
+	/*Al finalizar el particionado le damos en [ Write ] para escribir los cambios
+
+	Formatear las particiones
+	Ext4 es el más usado y recomendado.
+	Ext4 es un sistema de archivos transaccional (en inglés journaling) de Linux
+
+	Formateo de la Partición de arranque:
+	root@archiso ~ # mkfs.ext4 /dev/sda1
+
+	Formateo de la Partición de Root y Home en una sola partición:
+	root@archiso ~ # mkfs.ext4 /dev/sda2
+	
+	Partición de memoria virtual o memoria de intercambio SWAP:
+	root@archiso ~ # mkswap /dev/sda3
+	
+	Activar partición SWAP:
+	root@archiso ~ # swapon /dev/sda3
+
+	Montar las particiones
+	Ahora para root en este ejemplo es /dev/sda2 lo cual debe ser montado primero ya que todo inicia con ROOT /
+
+	root@archiso ~ # mount /dev/sda2 /mnt/
+	En este caso solo tenemos /boot en /dev/sda1
+
+	root@archiso ~ # mkdir -p /mnt/boot/
+	Montando la partición de Arranque /boot
+
+	root@archiso ~ # mount /dev/sda1 /mnt/boot
+	Verificamos que se hayan creado correctamente los directorios
+
+	root@archiso ~ # ls /mnt/
+	> /mnt - sistemas de archivos montados manualmente en el disco duro.
+
+	> / - diagonal invertida significa root
+
+	Generador de Mirrorlist dentro LiveCD
+	Ahora montadas las particiones instalamos los programas base y lo más esencial posible.
+	Pero hay muchos casos que pacstrap les resulta una descarga muy lenta y eso se debe al no tener los mirrosr mas rápidos de descarga.
+	Para tener los Mirrors más rápidos para tener mejores descargas usaremos reflector
+
+	root@archiso ~ # pacman -Sy reflector python --noconfirm
+	Para ejecutar reflector y tener los mejores Mirrors Servers es:
+
+	root@archiso ~ # reflector --verbose --latest 15 --sort rate --save /etc/pacman.d/mirrorlist
+	Para revisar la lista de Mirrors Servers y confirmar que lo hizo reflector el comando es:
+
+	root@archiso ~ # cat /etc/pacman.d/mirrorlist
+	Confirmamos comparando donde dice by Reflector
+
+
+
+
+	Instalación del sistema
+	Especificación de los paquetes necesarios.
+
+	root@archiso ~ # pacstrap /mnt base base-devel nano
+	/* Instalación base - base-devel: programas, configuraciones, directorios, etc...
+	/* Editor de texto en terminal: Nano
+
+	root@archiso ~ # pacstrap /mnt linux-firmware linux linux-headers mkinitcpio
+	/* linux-firmware: Binarios de controladores generalmente propietarios, Las tarjetas gráficas modernas de AMD, NVIDIA y Intel Wi-Fi requieren la carga de blobs para que el hardware funcione correctamente.
+	/* linux: kernel en su versión estable
+	/* linux-headers: cabezeras del kernel en su versión estable
+	/* mkinitcpio: Utilidad de creación de imágenes initramfs para el kernel
+
+	Después de la instalación del Kernel, Automático se crearan las IMG de Linux en la carpeta de /boot/ gracias a mkinitcpio
+
+	Los siguientes paquetes nos permiten gestionar las conexiones a Internet cableadas
+
+	root@archiso ~ # pacstrap /mnt dhcpcd networkmanager iwd net-tools ifplugd 
+	Los siguientes paquetes nos permiten gestionar las conexiones a Internet Inalámbrica (Wifi)
+
+	root@archiso ~ # pacstrap /mnt iw wireless_tools wpa_supplicant dialog wireless-regdb
+	En el caso que uses una laptop, para el Touchpad: (opcional)
+
+	root@archiso ~ # pacstrap /mnt xf86-input-libinput
+	En el caso que uses una laptop, para el Bluetooth: (opcional)
+
+	root@archiso ~ # pacstrap /mnt bluez bluez-utils pulseaudio-bluetooth
+
+	Si sale un error al usar pacstrap del tipo "error: could not open file /mnt/var/lib/pacman/sync/core.db: Unrecognized archive format" tenemos que eliminar el directorio "...sync/" de forma recursiva para solucionarlo.
+
+	root@archiso ~ # rm -R /mnt/var/lib/pacman/sync/
+
+	El archivo fstab
+	Es usado para definir cómo las particiones,
+	Estas definiciones se montaran de forma dinámica en el arranque
+
+	root@archiso ~ # genfstab -p /mnt >> /mnt/etc/fstab
+	/*Luego de generar el archivo fstab para las etiquetas de nuestras particiones
+	/*Revisamos con:
+	root@archiso ~ # cat /mnt/etc/fstab
+
+	Chroot
+	Entramos a la raíz del nuevo sistema como usuario root.
+	root@archiso ~ # arch-chroot /mnt
+	/* Entramos a raíz como root
+	/* Vemos cambio el color y cambio el ~ del livecd por / que significa root.
+	/* Dentro de nuestro sistema vamos a configurar idioma, teclado, hora y usuarios.
+
+	[root@archiso /]# nano /etc/locale.gen
+	/*Quitamos el # que es comentario en nuestro idioma >> es_ y nuestro país
+	/*En mi caso es PERÚ es > PE
+	/*Debe terminar en es_[país].UTF-8 UTF-8
+
+	Generamos el idioma seleccionado
+	[root@archiso /]# locale-gen
+
+
+	Establezca la variable LANG en locale.conf
+	Mi caso es es_MX.UTF-8
+	[root@archiso /]# echo LANG=es_PE.UTF-8 > /etc/locale.conf
+	
+	Exporte la variable LANG con el local especificado
+	[root@archiso /]# export LANG=es_PE.UTF-8
+
+	Zona Horaria
+
+	[root@archiso /]# ls /usr/share/zoneinfo/America/
+	[root@archiso /]# ls /usr/share/zoneinfo/Europe/
+	/* ln -sf - Genera un enlace simbólico es un acceso al fichero
+
+	[root@archiso /]# ln -sf /usr/share/zoneinfo/America/Lima /etc/localtime
+
+	Configuración del Usuario
+	El sistema está configurado para leer el reloj interno del equipo, después el reloj del sistema
+	Estable el RTC a partir de la hora del sistema.
+
+	[root@archiso /]# hwclock -w
+
+	Defina la distribución de teclado en vconsole.conf
+	[root@archiso /]# echo KEYMAP=es > /etc/vconsole.conf
+
+	Nombre del equipo, esto no es USUARIOS!
+	En nombre_de_pc le cambian por uno a su gusto, más adelante crearan un usuario
+
+	[root@archiso /]# echo nombre_de_pc > /etc/hostname
+
+	Modificamos el archivo Hosts
+	Es importante saber que nombre pusieron en Hostname porque aquí sera usado
+
+	[root@archiso /]# nano /etc/hosts
+	127.0.0.1 [tab] localhost
+
+	::1 [tab] localhost
+
+	127.0.1.1 [tab] nombre_de_pc.localdomain(Espacio)nombre_de_pc
+
+	USUARIOS
+	Contraseña para root:
+	[root@archiso /]# passwd root
+
+	Creamos nuestro usuario, para entrar a nuestro sistema.
+	[root@archiso /]# useradd -m -g users -G wheel -s /bin/bash nombre_de_usuario
+	[root@archiso /]# passwd nombre_de_usuario
+
+	Servicios Wifi-bluetooth:
+
+	[root@archiso /]# systemctl enable dhcpcd NetworkManager
+	Si instalaron paquetes de Bluetooth activen el servicio:
+
+	[root@archiso /]# systemctl enable bluetooth
+
+	Mirrorlist en root
+	Reflector es un script que es capaz de generar una lista y usa los repositorios mas rápidos
+	Ordenarlos en base a su velocidad, y sobrescribir el archivo /etc/pacman.d/mirrorlist
+
+	[root@archiso /]# pacman -Sy reflector
+	[root@archiso /]# reflector --verbose --latest 15 --sort rate --save /etc/pacman.d/mirrorlist
+
+	GRUB - Gestor de Arranque
+	Instalamos GRUB y osprober
+	Os-prober detecta más sistemas operativos si los tuviéramos, que usará grub para su menú (opcional)
+
+	[root@archiso /]# pacman -S grub os-prober 
+	Aquí solo importa instalar grub en el disco donde esta ArchLinux instalado en mi caso es /dev/sda
+
+	[root@archiso /]# grub-install /dev/sda
+
+	[root@archiso /]# nano /etc/default/grub
+
+	Podemos cambiar el tiempo de espera de Grub en TIMEOUT=5 y poner otro valor de seg.
+	Borramos quiet ese parámetro para que muestre todo el texto de inicio del sistema
+
+	[root@archiso /]# grub-mkconfig -o /boot/grub/grub.cfg
+
+	Saliendo de LiveCD
+	[root@archiso /]# exit
+	root@archiso ~ # exit
+
+	Salimos del sistema, desmontamos todas las particiones...
+
+	root@archiso ~ # umount -R /mnt
+	Y finalmente reiniciamos, retiramos la USB o el CD cuando este apagada la pc
+
+	root@archiso ~ # reboot
+
+	[nombre_de_usuario@nombre_de_pc ~]# 
+	Entramos como ROOT y revisamos la conexión a internet
+	Con la conexión cableada solo basta tener cable conectado y activado el servicio dhcpcd
+
+	[root@nombre_de_pc ~]# ping -c 3 archlinux.org
+
+	> Para Ethernet:
+	[root@nombre_de_pc ~]# ip link
+	[root@nombre_de_pc ~]# systemctl enable ifplugd@enp4s0
+	[root@nombre_de_pc ~]# systemctl enable ifplugd@wlp3s0
+	Es necesario reiniciar el sistema
+	ifplug es un demonio de systemD que configurará automáticamente su dispositivo Ethernet
+
+	> Para conectarnos a Wifi:
+
+	[root@nombre_de_pc ~]# nmcli dev wifi list
+
+	[root@nombre_de_pc ~]# nmcli dev wifi connect 'NOMBRE DE RED' password CLAVE
+	Verificamos la conexión:
+
+	[root@nombre_de_pc ~]# nmcli dev status
+
+	Actualizar el sistema:
+	[root@nombre_de_pc ~]# pacman -Syu
+
+	Personalizando PACMAN
+	El archivo general de configuración de pacman se encuentra en:
+
+	[root@nombre_de_pc ~]# nano /etc/pacman.conf
+	Nos ubicamos en la parte que dice: # Misc options
+
+	# Misc options
+	#UseSyslog
+	Color
+	TotalDownload
+	CheckSpace
+	#VerbosePkgLists
+	ILoveCandy
+	Y agregamos ILoveCandy (es una i mayus y luego una L)
+
+	Luego quitamos el # comentario en el repositorio de MultiLib
+	Esto nos brinda varias librerias de 32bits, en juegos o programas viejos que necesitan esas librerias
+
+	[multilib]
+	Include = /etc/pacman.d/mirrorlist
+
+	Actualizamos el sistema para ver el color y animación de pacman:
+
+	[root@nombre_de_pc ~]# pacman -Syu
+
+	Programas Extras
+	[root@nombre_de_pc ~]# pacman -Sy git wget
+	/* Descargas con git
+	/* Descargas con wget
+
+	[root@nombre_de_pc ~]# pacman -Sy neofetch 
+
+	[root@nombre_de_pc ~]# pacman -Sy amd-ucode
+	[root@nombre_de_pc ~]# pacman -Sy intel-ucode
+	Los fabricantes de procesadores lanzan actualizaciones de estabilidad y seguridad para el microcódigo del procesador (codigo cerrado)
+
+	No tenemos los directorios comunes:
+	[root@nombre_de_pc ~]# pacman -S xdg-user-dirs
+
+	La forma en que funciona es que xdg-user-dirs-update se ejecuta
+	Luego crea versiones localizadas de estos directorios
+	En el directorio de inicio de los usuarios con iconos especiales
+
+	[root@nombre_de_pc ~]# xdg-user-dirs-update
+
+	X.Org Server
+	X.Org Server proporciona las herramientas estándar para proveer de interfaces gráficas
+	X.Org es necesario tanto para Desktop environment (DE) y Window manager (WM)
+
+	[root@nombre_de_pc ~]# pacman -Sy xorg xorg-apps xorg-xinit xorg-twm xterm xorg-xclock
+	Para ejecutar X.org
+
+	[root@nombre_de_pc ~]# startx
+
+	Para salir escribir exit y enter
+
+
+	Driver de Vídeo
+	Con el siguiente comando nos dará información de nuestra tarjeta gráfica
+
+	[root@nombre_de_pc ~]# lspci | grep VGA
+
+	O también en neofetch en la parte que dice GPU...
+
+	Aqui solo instalaran drivers de código libre.
+
+	Para tarjetas de Intel con soporte a Vulkan (gaming)
+
+	[root@nombre_de_pc ~]# pacman -S xf86-video-intel vulkan-intel
+	Para tarjetas de Nvidia Código libre
+
+	[root@nombre_de_pc ~]# pacman -S xf86-video-nouveau
+	Para tarjetas de AMD ATI Código libre
+
+	[root@nombre_de_pc ~]# pacman -S xf86-video-ati
+	Para tarjetas de AMD Radeon R Código libre con soporte a Vulkan (gaming)
+
+	[root@nombre_de_pc ~]# pacman -S xf86-video-amdgpu vulkan-radeon
+	Podemos hacer una busqueda de todos los drivers de vídeo disponibles:
+
+	[root@nombre_de_pc ~]# pacman -Ss xf86-video
+
+	Audio
+	En Linux tenemos 3 sistemas para administración de audio:
+	ALSA: usado solo en terminal, lo cual ocupa menos espacio
+	PulseAudio: el estandar de los usuarios de casa con graficos
+	JACK: usado para tener menor latencia y estudios de música.
+
+	En este caso usaremos PulseAudio y PavuControl
+	PavuControl es la interfaz gráfica para la administración de audio.
+
+	[root@nombre_de_pc ~]# pacman -S pulseaudio pavucontrol
+
+	Fuentes de Letra
+	[root@nombre_de_pc ~]# pacman -S gnu-free-fonts ttf-hack ttf-inconsolata gnome-font-viewer
+
+	Ahora definimos la entrada de teclado para X.Org.
+	Para listar todas las distribuciones de teclado:
+
+	[root@nombre_de_pc ~]# localectl list-x11-keymap-layouts
+	para teclado permanente en latino en X.Org
+
+	[root@nombre_de_pc ~]# localectl set-x11-keymap latam
+	para teclado permanente en español en X.Org
+
+	[root@nombre_de_pc ~]# localectl set-x11-keymap es
+
+	(DE) vs (WM)
+	Ahora nos toca instalar un Escritorio o un Gestor de Ventanas
+

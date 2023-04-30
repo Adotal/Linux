@@ -1,0 +1,4 @@
+Instalar udiskctl2
+MONTAR:    #udisksctl mount -b /dev/sdbX
+DESMONTAR: #udisksctl unmount -b /dev/sdbX
+

@@ -1,0 +1,14 @@
+AUTOLOGIN WITH LIGHTDM
+
+	EDIT:
+sudo vim /etc/lightdm/lightdm.conf
+
+	UNCOMMENT:
+ [Seat:*]
+ autologin-user=usuario1
+ autologin-user-timeout=0
+
+	EXECUTE:
+sudo groupadd -r autologin
+sudo gpasswd -a usuario1 autologin
+

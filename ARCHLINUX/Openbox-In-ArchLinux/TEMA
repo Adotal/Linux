@@ -1,0 +1,6 @@
+INSTALAR:
+# sudo pacman -Syu lxappearance
+desomprimir el archivo de tema inclido en la capreta y copiarlo a
+ /usr/share/themes
+ 
+EJECUTAR lxappearance y poner el tema

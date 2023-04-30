@@ -1,0 +1,133 @@
++++++++Instalación Arch Linux (BIOS,MBR)+++++++++++++
+1.Descargar la imagen ISO y quemarla en un medio removible.
+
+2.Definir DIstribución del teclado:
+# loadkeys la-latin1
+
+3.COnectarse a internet por wifi(por cable es automático):
+Ver tarjetas de red (wlan0, enp..):
+# ip link
+
+Iniciar la tarjeta de red:
+# ip link set wlan0 up
+
+Scanear redes inalámbricas:
+# iwlist wlan0 scan
+
+Conectar (según contraseñá):
+Sin contraseña:
+# iwconfig wlan0 essid NombreDeRedWifi
+COntraseñá wep:
+# iwconfig wlan0 essid NombreDeRedWidi key s: ContraseñaRed
+Contraseñá wpa:
+# wpa_passphrase NombreDeRed ContraseñáRed > /etc/wifi
+# wpa_supplicant -B -i wlan0 -D wext -c /etc/wifi //(Es normal que salgan errores despúes de ejecutar esta instruccion)
+
+Generar ip y DNS:
+# dhclient
+
+Comprobar conexión red:
+ping google.com
+
+4.Particionar Formatear y montar disco:
+Ver discos:
+# fdisk -l
+
+Entrar fdisk:
+# fdisk /dev/sda
+Solicitar ayuda en fdisk:
+# m
+Ver tabla de particiones actuales:
+#p
+Crear tabla de particiones:
+# o
+Crear partición:
+# n
+...Seguir esquema de particiones de tu preferencia.....
+Hacer una partción booteable:
+# a
+Cambiar tipo de partición(para hacer la swap(num 82)):
+# t
+Salir guardando cambios:
+# w
+
+Montar e iniciar la partcición swap:
+# mkswap /dev/sdX2
+# swapon /dev/sdX2
+
+Formatear particiones:
+# mkfs.ext4 /dev/sdaX1
+
+MOntar particiones:
+# mount /dev/sdX1 /mnt -Partición root
+# mkdir /mnt/home -crear carpeta home
+# mount /dev/sdX4 /mnt/home -partición home
+
+5.Instalar paquetes escenciales:
+# pacstrap /mnt base linux linux-firmware nano grub networkmanager dhcpcd netcl wpa_supplicant dialog
+
+6.Configuración del sistema
+Fstab, Genere un archivo fstab (Español) (utilice -U o -L para especificar en dicho archivo las UUID o las etiquetas, respectivamente):
+# genfstab -U /mnt >> /mnt/etc/fstab
+
+Compruebe el archivo resultante en /mnt/etc/fstab, y modifíquelo en caso de errores.
+
+Chroot,Cambie la raíz al nuevo sistema:
+# arch-chroot /mnt
+
+Zona horaria, Defina su zona horaria:
+
+# ln -sf /usr/share/zoneinfo/Región/Ciudad /etc/localtime
+
+Ejecute hwclock(8) para generar el archivo /etc/adjtime:
+
+# hwclock --systohc
+
+Idioma del sistema:
+Edite /etc/locale.gen y descomente el locale (Español) necesario (por ejemplo, para España sería es_ES.UTF-8 UTF-8), además de en_US.UTF-8 UTF-8. Genere los locales ejecutando la orden:
+# locale-gen
+
+Cree el archivo locale.conf(5), y defina la variable LANG en consecuencia (siguiendo con el ejemplo de España):
+#/etc/locale.conf    |o| # echo "LANG=es_MX.UTF-8" > /etc/locale.conf
+#LANG=es_ES.UTF-8    |o|
+
+Si fuese necesario, defina la distribución de teclado en vconsole.conf(5) para que permanezca en cada reinicio:
+
+# /etc/vconsole.conf    |o hacer:| # echo "KEYMAP=la-latin1" > /etc/cvonsole.conf
+# KEYMAP=es             |o hacer:|
+
+Configurar la red
+Cree el archivo hostname:
+
+#/etc/hostname
+elnombredemiequipo
+
+Considere añadir una entrada similar en hosts(5):
+
+/etc/hosts
+127.0.0.1	localhost
+::1		localhost
+127.0.1.1	elnombredemiequipo.localdomain	elnombredemiequipo
+
+Crear una contraseña para root:
+# passwd 
+
+Añadir usuario y contraseñá:
+# useradd -m usuario1
+#passwd usuaro1
+
+Instalar gestor de arranque:
+# grub-install /dev/sda
+# grub-mkconfig -o /boot/grub/grub.cfg
+# mkinitcpio -P 
+
+]}}}}]]]]]Reiniciar y quitar el medio de instalación{[[[[[[[[[
+
+Iniciar internet(root):
+# systemctl start NetworkManager.service
+# systemctl ecale NetworkManager.service
+# ip link set (tarjeta de red) up
+# nmcli dev wifi connect NombredeRed password COntraseñá 
+
+Instalar gestor de ventanas(opcional):
+# pacman -S xorg-server xorg-xinit sddm (controlador tarjeta de video intel: xf86-video-intel) "escritorio, LXQT, XFCE, GNOME, Openbox"
