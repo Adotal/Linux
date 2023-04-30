@@ -1,0 +1,19 @@
+HIBERNET ARCHLINUX HAVING SWAP PARTITION
+
+-WRITE ON:
+/etc/tmpfiles.d/hibernation_image_size.conf
+
+#    Path                   Mode UID  GID  Age Argument
+w    /sys/power/image_size  -    -    -    -   0
+
+-INITFRAMS:
+#  HOOKS=(base udev autodetect keyboard modconf block filesystems resume fsck)
+
+-KERNEL PARAMETERS (X=swap partition):
+# resume=/dev/sdX
+or could be:
+# resume UUID of swap partition
+
+WRITE ON:
+# echo 60 > /sys/power/image_size
+
