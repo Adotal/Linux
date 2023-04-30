@@ -1,0 +1,29 @@
+SIEMPRE:
+Identificar ip del receptor:
+$ ip route
+ó
+$ ifconfig
+
+Canal de comunicación: 
+Receptor:
+$ nc -lp 1605
+Emisor:
+$nc 192.168.11.1 1605
+
+El receptor se pone a la escucha:
+$ nc -vl 4444 > nombre_del_archivo_recibir
+
+El emisor  envía:
+$ nc -N 192.168.100.213 4444 < nombre_del_archivo_enviar
+
+ARCHIVOS GRANDES: 
+$ nc -vl 4444 | gunzip > file_name
+
+$ gzip -c file_name | nc -N 192.168.100.213 4444
+
+CARPETAS:
+$ nc -vl 4444 | tar zxv
+
+$ tar czp file_name | nc -N 192.168.100.213
+
+

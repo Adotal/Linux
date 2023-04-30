@@ -1,0 +1,12 @@
+USB BOOTEABLE DESDE LINUX CON LA UTILIDAD dd DESDE TERMINAL
+
+COMPROBAR LOS DISPOSITIVOS DE ALMACENAMIENTO DESDE LA TERMINAL PARA ENCONTRAR USB:
+# lsblk 
+
+IR A LA RUTA DONDDE SE ENCUENTRE LA IMAGEN ISO***
+
+LA UTILIDAD dd par quemar la imagen ISO:
+# sudo dd bs=4M if=nombredelaiso.iso of=/dev/sdx && sync
+
+TAMBIEN PUEDE SER UTILIZADO:
+# sudo dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx status=progress oflag=sync

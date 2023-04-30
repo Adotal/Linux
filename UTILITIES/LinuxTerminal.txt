@@ -1,0 +1,62 @@
+CURSO LINUX SISTEMA GEEK
+
+LISTAR
+ls -lista archivos del directorio
+ls -l -lista archivos y propiedades
+ls -la -lista archivos ocultos y propiedades
+ls -lh -lista archivos en kb mb p gb si es el numero es grande
+ls -lR -lista archivos y lo que hay dentro de las carpetas
+ls -lt -organizar archivos del mas nuevo al mas antiguo
+ls -lr - organiza archivos del mas antiguo al mas nuevo
+
+COPIAR Y PEGAR
+cp "file name" diretorio/ 
+cp *.txt directorio -copia todos los arcivos que tengan terminación .txt
+cp -r -copiar carpetas con archivos
+cp -i copia arcivos y pregunta si se desea sobreescribir el archivo en caso de que ya exista
+cp -v -muestra el archivo copiado a la ruta
+cp -u -no copia el arhivo si detecta que ya existe en el directorio
+
+IMPRIMIR DIRECTORIO
+pwd -imprimir el directorio actual
+
+CREAR/LEER/BORRAR ARCHIVOS
+touch "file name and extension" -crear archivo
+cat "file name" -leer archivo
+rm "file name" -borrar archivos
+rm -i -preguntar si se desea eliminar el arhcivo
+
+CREAR/BORRAR CARPETAS
+mkdir "folder name" -crear carpetas
+rm -R -eliminar TODO lo que haya dentro del directorio
+rmdir -borrar carpetas sin archivos
+rmdir -p -borra todos los directorios y subdirectorios señalados
+
+MOVER/RENOMBRAR ARCHIVOS Y CARPETAS
+mv "file or folder name" directory/
+mv -i -preguntar si sobreescribir archivos
+mv "file name" "new file name" -renombrar archivos
+
+BUSCAR ARCHIVOS CARPETAS Y DISPOSITIVOS
+find directory/ -name 'file name.*' -buscar arhivos por nombre	
+find directory/ -name '*.extensión' -buscar archivos según una extensión
+find directorio/ -name '*parte del nombre*.extensión' -buscar archivos según extensión y parte del nombre
+find .. -name '*.extensión' -buscar en el directorio anterior
+find . -name '*.extensión' -buscar en el directorio actual
+find . -name foldername -type d -buscar carpetas en el directorio actual
+find . -name "nombre" -user "usuario" -buscar archivos segun el usuario
+
+PROPIEDADES DE ARCHIVOS
+wc    "fnm" -mostrar nombre,cantidad de lineas de texto,palabras y bytes que posee el archivo
+wc -c "fnm" -muestra solo los bytes del texto
+wc -w "fnm" -cantidad de palabras del archivo
+wc -m "fnm" -cantidad de caracteres del texto
+wc -l "fnm" -cantidad de lineas del archivo de texto
+file "fnm"  -propiedades del archivo
+file -b "fnm" -propiedades del archivo sin su nombre (resumida)
+file * -propiedades de los archivos del directorio actual
+
+COMPRIMIR7DESCOMPRIMIR ARCHIVOS .tar
+tar cvf "newcmpresedfilename" archivos a comprimir/ -comprimir archivos."c"crear archivo "v" ver proceso "f" trabaja con archivo .tar
+tar tvf "filename" -ver contenido de archivos .tar sin descoprimirlo."t"leer contenido "v"ver proceso "f"archivo .tar
+tar xvf "filename" -extraer archvos.tar."x"descomprimir "v"ver proceso "f"archivo.tar

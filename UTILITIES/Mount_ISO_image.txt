@@ -1,0 +1,10 @@
+
+Montar im genes ISO
+
+1er. paso. Crear un directorio (punto de montaje) donde montarás la imagen. #> mkdir /mnt/iso (o donde gustes crearlo)
+
+2do. paso. Añadir o cargar el módulo loop al kernel. #> modprobe loop.
+
+3er. paso. Montar la imagen. #> mount -t iso9660 -o loop archivo.iso /mnt/iso. ...
+
+4to. paso. Desmontar la imagen.

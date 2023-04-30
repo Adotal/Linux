@@ -1,0 +1,2 @@
+ USAR feh para fondos de pantalla:
+$ feh --bg-fill Wallpaper.png

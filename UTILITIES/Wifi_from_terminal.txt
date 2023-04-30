@@ -1,0 +1,11 @@
+> Para conectarnos a Wifi:
+
+[root@nombre_de_pc ~]# nmcli dev wifi list
+
+
+Si la red tiene espacios solo ponemos comilla simple o doble comillas en el bssid:
+
+[root@nombre_de_pc ~]# nmcli dev wifi connect 'NOMBRE DE RED' password CLAVE
+Verificamos la conexión:
+
+[root@nombre_de_pc ~]# nmcli dev status
