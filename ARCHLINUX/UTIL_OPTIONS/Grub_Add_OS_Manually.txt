@@ -1,0 +1,13 @@
+Si no aparece otro sisema operativo cuando se hace dual boot en linux, añadirlo manualmente con:
+
+SUPONIENDO QUE EL SISTEMA WINDOWS ESTA EN EL DISCO 0, EN LA PRIMERA PARTICIÓN
+(hd0,1) = disco 0 particion 1
+
+
+menuentry "Microsoft Windows 7" {
+set root=-(hd0,1)
+chainloader +1
+}
+
+TODAS ESTAS LINEAS DE CÓDIGO VAN ABAJO DE EL ""MENUENTRTY DEL SISTEMA LINUX VIGENTE, 
+ESPECIFICAMENTE ENTRE ### BEGIN /etc/grub.d/10_linux ### y ### END /etc/grub.d/10_linux ###
