@@ -1,0 +1,6 @@
+ADMINISTRACIÓNN DE DISCOS DUROS
+df - muestra todos los discos,particiones, etc
+df -h muestra todos los discos particiones,etc con propiedades de tamaño y uso
+df -h | grep /dev/sd - muestra discos duros filtrados.
+
+

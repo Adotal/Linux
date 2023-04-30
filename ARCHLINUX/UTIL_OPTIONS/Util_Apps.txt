@@ -4,3 +4,4 @@ auto-cpufreq - Optimizar procesador
 yay(aur) - Administrador de paquetes AUR
 clamav - antivirus
 cylon(aur) - herramienta de mantenimiento para Arch
+nethogs - Watch network actions
