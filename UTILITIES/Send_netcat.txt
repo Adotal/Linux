@@ -4,12 +4,6 @@ $ ip route
 ó
 $ ifconfig
 
-Canal de comunicación: 
-Receptor:
-$ nc -lp 1605
-Emisor:
-$nc 192.168.11.1 1605
-
 El receptor se pone a la escucha:
 $ nc -vl 4444 > nombre_del_archivo_recibir
 
