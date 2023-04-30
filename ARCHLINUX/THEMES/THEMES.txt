@@ -1,0 +1,9 @@
+INSTALLL:
+
+sudo pacman -Syu lxappearance qt5ct arc-solid-gtk-theme
+
+UNZIP AND PASTE dt-dark-theme-master to:
+
+/usr/share/themes/
+ 
+EXEC lxappearance AND SET THE THEME
