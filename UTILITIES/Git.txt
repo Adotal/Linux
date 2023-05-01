@@ -1,0 +1,77 @@
+// git use guide
+
+-Insatll it
+https://git-scm.com/
+
+-Assign configuration
+$ git config --global user.name "User 1"
+$ git config --global user.email email_addres@gmail.com
+$ git config --global core.editor "vim"		// "code --wait"
+
+-Default main branch name
+git config --global init.defaultBranch <nombre>
+
+// Unix: input || MS Windows: true
+$ git config --global core.autocrlf input	
+
+-Create a workspace directory
+$ mkdir Workspace
+
+-Confirm configuration
+$ git config --global -e
+
+-Initialize repository 
+// Computer-Stage-Commit-Server
+$ git init
+
+-STATUS - STAGE - COMMIT 
+$ git status 
+$ git add a.txt		// .cpp, etc.   
+$ git commit -m "Util Message"
+
+-Move and remove
+$ git mv a.txt
+$ git rm a.txt
+
+-If you need to ignore some files,
+you can type their name in .gitignore
+$ echo file.name >> .gitignore
+
+-A better git status
+$ git status -s
+
+-See changes
+$ git diff
+
+-Merge a branch to master (you must be on master)
+$ git merge  
+
+-See branch
+$ git branch 
+
+-Create and change branch
+$ git checkout -b name_of_branch
+
+// Is the same: $ git branch name_of_branch; git checkout name_of_branch
+
+-Merge a branch on master
+$ git merge name_of_branch
+
+-Upload changes
+$ git branch -M main
+$ git remote add origin https://github.com/
+$ git push -u origin main
+
+// You will need to create a token to upload changes
+// Create token on https://github.com//
+// Settings-Developer settings-Personal access token
+
+-Upload a branch 
+$ git checkout name_of_branch
+$ git push -u name_of_branch
+
+-Upload new code 
+1. Edit code
+2. git add a.txt
+3. git commit -m "Message_to_coworkers"
+4. git push

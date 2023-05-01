@@ -1,0 +1,35 @@
+---BLUETOOTH DESDE TERMINAL---
+Install bluedevil
+start daemon:
+$ sudo systemctl start bluetoothctl
+
+start blue
+[bluetooth]# bluetoothctl
+
+#help	 //to view help
+#list	 //to view driver
+#devices //to view devices paired
+#info	 //to show info
+
+#show (mac_controler) //to show status
+EXAMPLE: #show 40:E2:30:C4:03:60
+
+make it pairable and discoverable:
+[bluetooth]# pairable on
+[bluetooth]# discoverale on
+
+activate scan:
+# scan on
+
+pair device:
+#pair 40:E2:30:C4:03:60
+confirm yes
+
+connect device
+# connect 40:E2:30:C4:03:60
+
+trust in him:
+# trust 40:E2:30:C4:03:60
+
+disconnect:
+# disconnect 40:E2:30:C4:03:60

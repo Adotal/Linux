@@ -1,0 +1,3 @@
+echo HOLA MUNDO
+echo PROCEDIENDO A ACTUALIZAR SISTEMA...
+sudo pacman -Syu
