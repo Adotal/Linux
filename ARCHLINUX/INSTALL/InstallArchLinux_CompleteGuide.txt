@@ -467,4 +467,6 @@ Disponible 4 particiones primarias
 
 	(DE) vs (WM)
 	Ahora nos toca instalar un Escritorio o un Gestor de Ventanas
-
+	
+	TOUCHPAD ON LAPTOP:
+	[root@nombre_de_pc ~]# pacman -S xf86-input-synapticsxf86-input-synaptics
