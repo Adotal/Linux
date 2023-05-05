@@ -26,6 +26,12 @@ cat "file name" -leer archivo
 rm "file name" -borrar archivos
 rm -i -preguntar si se desea eliminar el arhcivo
 
+BORRAR TODO EXCEPTO 1, 2 ARCHIVOS:
+shopt -s extglob
+rm -v !("filename1"|"filename2")
+rm -v !(*.zip)
+shopt -u extglob
+
 CREAR/BORRAR CARPETAS
 mkdir "folder name" -crear carpetas
 rm -R -eliminar TODO lo que haya dentro del directorio
