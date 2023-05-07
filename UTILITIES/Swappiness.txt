@@ -1,13 +1,13 @@
 MODIFICAR LA PRIORIDAD DE LA MEMORIA SWAP
 
-Para ver la prioridad de la memoria swap:
-cat /proc/sys/vm/swappiness
-Entre más cerca del cero esté menos se usara la memoria swap, entre más cercano al cien, más se usara la swap. Default=60
+To check the current swappiness value:
+$ sysctl vm.swappiness
 
-Cambiar prioridad de la memoria swap temporalmente:
-sudo sysctl vm.swappiness=30
+To temporarily set the swappiness value:
+# sysctl -w vm.swappiness=30 
 
-Cambiar prioridad de la memoria swap permanentemente:
-sudo nano /etc/sysctl.conf
-En la última linea del archivo dar enter y escribir: 
-vm.swappiness=30
+To set the swappiness value permanently, create a sysctl.d(5) configuration file.
+For example:
+
+/etc/sysctl.d/99-swappiness.conf
+vm.swappiness = 10
