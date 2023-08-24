@@ -14,3 +14,7 @@ $: sudo systemctl start ntpd
 Podemos utilizar la orden ntpdate para sincronizar la hora al instante:
 
 $: sudo ntpdate pool.ntp.org
+
+Establecer timedatectl:
+
+$: timedatectl set-ntp true
