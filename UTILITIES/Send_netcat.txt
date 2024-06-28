@@ -5,10 +5,10 @@ $ ip route
 $ ifconfig
 
 El receptor se pone a la escucha:
-$ nc -vl 4444 > nombre_del_archivo_recibir
+$ nc -l -p 4444 > nombre_del_archivo_recibir
 
 El emisor  envía:
-$ nc -N 192.168.100.213 4444 < nombre_del_archivo_enviar
+$ nc -w 3 192.168.100.213 4444 < nombre_del_archivo_enviar
 
 ARCHIVOS GRANDES: 
 $ nc -vl 4444 | gunzip > file_name
