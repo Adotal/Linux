@@ -1,0 +1,5 @@
+
+------------------PRINTING IN ARCH LINUX------------------
+
+1. Install cups, usbutils & cups-pdf
+2. Start cups servic

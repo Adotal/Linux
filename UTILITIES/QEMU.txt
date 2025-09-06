@@ -1,0 +1,5 @@
+
+--------------VIRTUALIZACIÓN CON QEMU-----------
+qemu-system-x86_64 -m 2G -smp 3 --enable-kvm -name "ArchLinux1" -boot d -cdrom /home/usuario1/Downloads/archlinux-2025.03.01-x86_64.iso
+
+

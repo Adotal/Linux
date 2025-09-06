@@ -1,0 +1,20 @@
+/////////////////// CHANGE MAC ADDRESS //////////////
+
+First, you can check your current MAC address with the command:
+
+# ip link show interface
+
+The section that interests us at the moment is:
+link/ether 00:1d:98:5a:d1:3a
+
+The first step to spoofing the MAC address is to bring the network interface down. It can be accomplished with the command:
+
+# ip link set dev interface down
+
+To change the MAC, we need to run the command:
+
+# ip link set dev interface address XX:XX:XX:XX:XX:XX
+
+The final step is to bring the network interface back up. This can be accomplished by running the command:
+
+# ip link set dev interface up
