@@ -1,0 +1,26 @@
+--------------------------------XAMPP ON ARCH LINUX--------------------
+
+1 - INSTALL FROM AUR:
+https://wiki.archlinux.org/title/XAMPP
+
+2 - START/STOP THE SERVICE:
+$ sudo /opt/lampp/lampp start
+$ sudo /opt/lampp/lampp stop
+
+
+3 - OPEN THE MANAGER:
+$ sudo ./manager-linux.run
+
+3.1 - OPEN MYSQL TERMINAL
+$ /opt/lampp/bin/mysql
+
+4 - FOR PHP DEVELOPING:
+	SYMBOLIC LINC TO HTDOCS:
+	$ sudo ln -s /opt/lampp/htdocs /home/Directory/www
+
+	NOTE: THE PERMITS ARE ASSIGNED TO EACH INDIVDUAL PROJECT IN htdocs SYMLINK
+	ASSIGN GROUP AN USER TO MODIFY
+	$ sudo chown -R daemon:linuxitos developer_dir
+
+	ASSIGN PERMITS TO DEVELOPING DIRECTORY:
+	$ sudo chmod -R 775 developer_dir
