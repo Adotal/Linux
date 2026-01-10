@@ -1,0 +1,24 @@
+-------------XORG (X11) CONFIG WITH DWM---------
+
+// NO DISPLAY MANAGER (LIKE LIGHTDM)
+// EXAMPLE WITH DWM
+
+1. Add to ~/.xinitrc
+
+exec dwm
+
+2. Test with startx
+3. Add at end of ~/.bash_profile
+
+startx
+
+
+-----------AUTOLOGIN TTY-----------------
+
+1. $ sudo systemctl edit getty@tty1
+2. Add in the file
+
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noreset --noclear --autologin username - ${TERM}
+

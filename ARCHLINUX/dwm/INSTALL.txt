@@ -1,0 +1,10 @@
+-----------------------DWM----------------
+
+1. DOWNLOAD AND COMPILE
+
+git clone https://git.suckless.org/dwm/
+cd dwm
+sudo make clean install
+
+2. Edit config.h to new features and recompile
+3. Reboot dwm with Mod+Shift+q
