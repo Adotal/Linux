@@ -42,3 +42,27 @@ libusb libffi openssl libgcrypt glib2 pixman sdl2 libslirp ccache dfu-util cmake
 # code
 # yay -S code-marketplace
 # # NOTE: VSCODE C/C++ EXTENSION NOT AVAILABLE IN OSS UNITL VERSION 1.20.5
+
+# FIX SYSTEM-D BOOT INITFRAMS AFTER UPDATE
+
+/etc/systemd/system/efistub-update.path
+[Unit]
+Description=Copy EFISTUB Kernel to EFI system partition
+
+[Path]
+PathChanged=/boot/initramfs-linux-fallback.img
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=system-update.target
+
+/etc/systemd/system/efistub-update.service
+[Unit]
+Description=Copy EFISTUB Kernel to EFI system partition
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cp -af /boot/vmlinuz-linux-zen /efi/vmlinuz-linux-zen
+ExecStart=/usr/bin/cp -af /boot/initramfs-linux-zen.img /efi/initramfs-linux-zen.img
+ExecStart=/usr/bin/cp -af /boot/amd-ucode.img /efi/amd-ucode.img
+
