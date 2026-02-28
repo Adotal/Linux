@@ -15,6 +15,11 @@ echo "Your ethernet interface is [$eth_interface]"
 echo ""
 echo "Your current MAC address is [$current_mac]" 
 echo ""
+echo "Known MAC address are:"
+echo "F: C-222 - B0:22:7A:21:D1:41"
+echo "F: C-220 - B0:22:7A:22:F5:23"
+echo "F: C-219 - B0:22:7A:22:F5:FD"
+echo ""
 echo "Write the new MAC addr"
 read mac_addr;
 
@@ -28,5 +33,5 @@ sudo ip link set dev $eth_interface address $mac_addr
 # Reactiva la interfaz:
 sudo ip link set dev $eth_interface up
 
-echo "Successfully changed to $mac_addr"
+echo "Successfully changed to [$mac_addr]"
 echo "---------------------CHANGE MAC ADDRESS LINUX-----------------------"

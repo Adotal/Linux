@@ -132,12 +132,12 @@ static const char *brightnessdw[] = { "brightnessctl", "set", "5%-", NULL };
 // Screenshots
 static const char *fullscrot[] = {
     "sh", "-c",
-    "grim \"$HOME/Images/Screenshots/$(date +'%d_%m_%Y_%s').png\"",
+    "grim - | tee \"$HOME/Images/Screenshots/$(date +'%d_%m_%Y_%s').png\" | wl-copy -t image/png",
 	NULL
 };
 static const char *selscrot[] = {
     "sh", "-c",
-    "grim -g \"$(slurp)\" \"$HOME/Images/Screenshots/$(date +'%d_%m_%Y_%s')_sel.png\"",
+    "grim -g \"$(slurp)\" - | tee \"$HOME/Images/Screenshots/$(date +'%d_%m_%Y_%s')_sel.png\" | wl-copy -t image/png",
 	NULL
 };
 // Shutdown - Reboot

@@ -1,0 +1,10 @@
+------------------ACCESS POINT WITH HOTSPOT LINUX-----------
+
+1. Install (AUR)
+yay -S linux-wifi-hotspot
+
+2. Create AP 
+$ sudo create_ap wlp2s0 enp1s0f1 Extender-AO NewAccessITBlue300
+
+3. Create Alias (.bashrc)
+alias ap_now='sudo create_ap wlp2s0 enp1s0f1 Extender-AO NewAccessITBlue300'

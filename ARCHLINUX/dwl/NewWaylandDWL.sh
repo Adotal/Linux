@@ -11,7 +11,7 @@ cd
 # echo "exec dwl 2> ~/.dwl.log" >> /home/${USER}/.bash_profile
 
 # Install packages
-sudo pacman -Syu fastfetch htop tree libinput wayland wlroots0.19 wayland-protocols pkg-config brightnessctl wget foot firefox chromium seatd code gimp pcmanfm wmenu ttf-dejavu-nerd go acpi unzip zip python3 jdk11-openjdk grim slurp swayimg man-db lib32-vulkan-radeon android-tools libreoffice-still pipewire pipewire-pulse wireplumber udiskie kdenlive lm_sensors mpv zathura zathura-pdf-mupdf imagemagick apache yt-dlp mariadb kicad kicad-library openssh pavucontrol lsp-plugins easyeffects docker \
+sudo pacman -Syu fastfetch htop tree libinput wayland wlroots0.19 wayland-protocols pkg-config brightnessctl wget foot firefox chromium seatd code gimp pcmanfm wmenu ttf-dejavu-nerd go acpi unzip zip python3 jdk11-openjdk grim slurp swayimg man-db lib32-vulkan-radeon android-tools libreoffice-still pipewire pipewire-pulse wireplumber udiskie kdenlive lm_sensors mpv zathura zathura-pdf-mupdf imagemagick apache yt-dlp mariadb kicad kicad-library openssh pavucontrol lsp-plugins easyeffects docker keepassxc wl-clipboard \
 libusb libffi openssl libgcrypt glib2 pixman sdl2 libslirp ccache dfu-util cmake python-pip # ESP-IDF DEPENDENCIES
 
 # dwl
@@ -66,3 +66,11 @@ ExecStart=/usr/bin/cp -af /boot/vmlinuz-linux-zen /efi/vmlinuz-linux-zen
 ExecStart=/usr/bin/cp -af /boot/initramfs-linux-zen.img /efi/initramfs-linux-zen.img
 ExecStart=/usr/bin/cp -af /boot/amd-ucode.img /efi/amd-ucode.img
 
+
+# DEFAULT IMAGE VIEWER FOR WAYLAND (swayimg)
+# Figure out wich filetype is (any wanted to link to an specific app)
+xdg-mime query filetype Images/Image.png 
+# Set default app
+xdg-mime default swayimg.desktop image/jpeg image/png image/gif image/webp image/bmp
+# zathura file name with ls /usr/share/applications/ | grep zathura
+xdg-mime default org.pwmt.zathura.desktop application/pdf

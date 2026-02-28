@@ -1,0 +1,5 @@
+1. Use gvim instead of vim package
+2. Add to ~/.vimrc
+set clipboard=unnamedplus
+3. Now yanking and pasting is same as clipboard
+4. Also available with "+y and "+p
