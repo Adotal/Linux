@@ -16,10 +16,12 @@ echo ""
 echo "Your current MAC address is [$current_mac]" 
 echo ""
 echo "Known MAC address are:"
+echo "F: C-223 - B0:22:7A:22:F4:78"
 echo "F: C-222 - B0:22:7A:21:D1:41"
 echo "F: C-220 - B0:22:7A:22:F5:23"
 echo "F: C-219 - B0:22:7A:22:F5:FD"
-echo ""
+echo "F: C-206 - 8C:DC:D4:4F:9:54"
+echo "EMP	   - 7C:D3:0A:72:F0:A4"
 echo "Write the new MAC addr"
 read mac_addr;
 

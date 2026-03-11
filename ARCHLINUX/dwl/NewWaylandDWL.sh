@@ -11,7 +11,7 @@ cd
 # echo "exec dwl 2> ~/.dwl.log" >> /home/${USER}/.bash_profile
 
 # Install packages
-sudo pacman -Syu fastfetch htop tree libinput wayland wlroots0.19 wayland-protocols pkg-config brightnessctl wget foot firefox chromium seatd code gimp pcmanfm wmenu ttf-dejavu-nerd go acpi unzip zip python3 jdk11-openjdk grim slurp swayimg man-db lib32-vulkan-radeon android-tools libreoffice-still pipewire pipewire-pulse wireplumber udiskie kdenlive lm_sensors mpv zathura zathura-pdf-mupdf imagemagick apache yt-dlp mariadb kicad kicad-library openssh pavucontrol lsp-plugins easyeffects docker keepassxc wl-clipboard \
+sudo pacman -Syu fastfetch htop tree libinput wayland wlroots0.19 wayland-protocols pkg-config brightnessctl wget foot firefox chromium seatd code gimp pcmanfm wmenu ttf-dejavu-nerd go acpi unzip zip python3 jdk11-openjdk grim slurp swayimg man-db lib32-vulkan-radeon android-tools libreoffice-still pipewire pipewire-pulse wireplumber udiskie kdenlive lm_sensors mpv zathura zathura-pdf-mupdf imagemagick apache yt-dlp mariadb kicad kicad-library openssh pavucontrol lsp-plugins easyeffects docker keepassxc wl-clipboard wlr-randr \
 libusb libffi openssl libgcrypt glib2 pixman sdl2 libslirp ccache dfu-util cmake python-pip # ESP-IDF DEPENDENCIES
 
 # dwl
