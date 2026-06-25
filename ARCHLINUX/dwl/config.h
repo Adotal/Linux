@@ -27,7 +27,7 @@ static const Rule rules[] = {
 	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
 	{ "firefox",		 NULL,		 1 << 2,		0,			-1 }, /* Start on ONLY tag "3" */
     /* default/example rule: can be changed but cannot be eliminated; at least one rule must exist */
-	{ "helium-browser",		 NULL,		 1 << 2,		0,			-1 }, /* Start on ONLY tag "3" */
+	{ "firefox",		 NULL,		 1 << 2,		0,			-1 }, // Start on tag 3
 };
 
 /* layout(s) */
@@ -153,7 +153,7 @@ static const char *micmute[] = {"pactl", "set-source-mute", "@DEFAULT_SOURCE@", 
 // Win + E (file manager)
 static const char *pcmanfm[] = {"pcmanfm", NULL};
 // Win + B (default browser)
-static const char *defaultBrowser[] = {"helium-browser", NULL};
+static const char *defaultBrowser[] = {"firefox", NULL};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
