@@ -7,31 +7,16 @@ UNCOMPRESS
 tar -xvfz
 
 -------------------- 7z ----------------------------------
+
+7z is a perfect option of compression tool, it doesn't save metadata
+
+It forces the LZMA2 algorithm to use massive memory dictionaries and enables "solid" archiving (analyzing files together rather than individually).
+
 HIGHEST LOSSLESS COMPRESSION
 
-7z a -t7z -m0=lzma2 -mx=9 -mfb=273 -md=1024m -ms=on archive.7z /path/to/target
+$ 7z a -t7z -m0=lzma2 -mx=9 -mfb=273 -md=1024m -ms=on archive.7z /path/to/target
 
-
-EXPLANATION
-
-Command Breakdown
-a: Adds files to the archive.
--t7z: Explicitly formats the output container as a .7z file.
--m0=lzma2: Uses LZMA2, the most efficient default algorithm for handling large files and uncompressible data.
--mx=9: Sets the compression level to Ultra (maximum).
--mfb=273: Forces 273 Fast Bytes, the absolute maximum match finder length allowed by the LZMA2 algorithm to scrape for identical patterns.
--md=1024m: Sets a 1 GB dictionary size, allowing 7z to search for duplicate patterns across massive stretches of data.
--ms=on: Enables Solid Archive mode, compressing all files together as a single block to vastly increase compression on similar or repeated files.
-
-
-
-1. 7-Zip (7z) — The Heavyweight King
-
-Your provided structure is already near perfect for absolute maximum compression. It forces the LZMA2 algorithm to use massive memory dictionaries and enables "solid" archiving (analyzing files together rather than individually).
-Bash
-
-7z a -t7z -m0=lzma2 -mx=9 -mfb=273 -md=1024m -ms=on archive.7z /path/to/target
-
+BREACKDOWN
     -mx=9: Ultra compression level.
 
     -mfb=273: Maxes out "fast bytes" (match length finder) to its technical limit.
@@ -40,13 +25,16 @@ Bash
 
     -ms=on: Turns on Solid mode, which massively reduces size if you have many similar files.
 
-2. XZ (xz) — The Standard for Linux Source Code
 
-Like 7-Zip, xz natively uses the LZMA2 algorithm. By default, xz is single-threaded and capped. To push it to 7z-level limits while leveraging your multi-core CPU, use this command:
-Bash
+2. XZ
 
-tar -I 'xz --lzma2=dict=1024MiB,mf=bt4,nice=273,depth=512 --threads=0' -cvf archive.tar.xz /path/to/target
+USING TAR: When metadata or linux permissions is an important feature to save, TAR with XZ is the best compression option
 
+Like 7-Zip, xz natively uses the LZMA2 algorithm. By default, xz is single-threaded and capped. To push it to 7z-level limits while leveraging your multi-core CPU use:
+
+$ tar -I 'xz --lzma2=dict=1024MiB,mf=bt4,nice=273,depth=512 --threads=0' -cvf archive.tar.xz /path/to/target
+
+BREAKDOWN
     -I: Tells tar to use a custom compression program stream.
 
     dict=1024MiB: Sets a 1GB LZMA2 dictionary (matches your 7z settings).
@@ -57,18 +45,22 @@ tar -I 'xz --lzma2=dict=1024MiB,mf=bt4,nice=273,depth=512 --threads=0' -cvf arch
 
     --threads=0: Uses all available CPU cores (Crucial, because xz -9 normally only uses 1 core).
 
-    💡 Shorthand Alternative: If you don't want to type out the custom parameters, the standard maximum is tar -I 'xz -9e -T0' -cvf archive.tar.xz /path/to/target (where -e means "extreme").
+SHORTAND ALTERNATIVE
+The standard maximum is 
+
+tar -I 'xz -9e -T0' -cvf archive.tar.xz /path/to/target
+
+( -e means "extreme").
 
 3. GZIP (gzip / "gx") — The High-Speed Classic
 
-(Assuming "gx" was a typo for gz/gzip) Standard gzip uses the older Deflate algorithm. It is fast, but doesn't compress as tightly as LZMA2. To maximize standard gzip across all CPU cores, use pigz (Parallel GZIP):
-Bash
+Standard gzip uses the older Deflate algorithm. It is fast, but doesn't compress as tightly as LZMA2. To maximize standard gzip across all CPU cores, use pigz (Parallel GZIP):
 
-tar -I 'pigz -9' -cvf archive.tar.gz /path/to/target
+$ tar -I 'pigz -9' -cvf archive.tar.gz /path/to/target
 
     -9: Extreme compression mode for Deflate.
 
-👑 The Secret "Max Gzip" Weapon: Zopfli
+The Secret "Max Gzip" Weapon: Zopfli
 
 If your goal is the absolute smallest .gz file possible (100% compatible with standard gzip but with 5% better compression than gzip -9), use Zopfli. It is incredibly slow but mathematically optimal:
 Bash
