@@ -27,6 +27,7 @@ static const Rule rules[] = {
 	{ "Gimp_EXAMPLE",     NULL,       0,            1,           -1 }, /* Start on currently visible tags floating, not tiled */
 	{ "firefox",		 NULL,		 1 << 2,		0,			-1 }, /* Start on ONLY tag "3" */
     /* default/example rule: can be changed but cannot be eliminated; at least one rule must exist */
+	{ "helium-browser",		 NULL,		 1 << 2,		0,			-1 }, /* Start on ONLY tag "3" */
 };
 
 /* layout(s) */
@@ -151,6 +152,8 @@ static const char *volmute[] = {"pactl", "set-sink-mute", "@DEFAULT_SINK@", "tog
 static const char *micmute[] = {"pactl", "set-source-mute", "@DEFAULT_SOURCE@", "toggle", NULL};
 // Win + E (file manager)
 static const char *pcmanfm[] = {"pcmanfm", NULL};
+// Win + B (default browser)
+static const char *defaultBrowser[] = {"helium-browser", NULL};
 
 static const Key keys[] = {
 	/* Note that Shift changes certain key codes: 2 -> at, etc. */
@@ -170,6 +173,7 @@ static const Key keys[] = {
 	{ 0,						 XKB_KEY_XF86AudioMicMute, 	spawn,			{.v = micmute} },
 	{ MODKEY,                    XKB_KEY_e,           		spawn,        	{.v = pcmanfm} },
 	{ MODKEY,					 XKB_KEY_a,      			zoom,             {0} },
+	{ MODKEY,					 XKB_KEY_b,      			spawn,		{.v = defaultBrowser} },
 
 	// Default
 	{ MODKEY,                    XKB_KEY_p,           spawn,            {.v = menucmd} },

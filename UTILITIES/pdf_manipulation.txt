@@ -1,0 +1,42 @@
+
+1. qpdf: El motor principal para manipulación
+Es probablemente la herramienta más robusta para transformar PDFs sin perder calidad. qpdf es ideal para unir, dividir, encriptar y optimizar archivos. 
+CyberPanel
+CyberPanel
+ +2
+Instalación: sudo pacman -S qpdf
+Combinar archivos: qpdf --empty --pages file1.pdf file2.pdf -- output.pdf
+Dividir (extraer páginas 1-5): qpdf input.pdf --pages . 1-5 -- output.pdf
+Eliminar contraseña: qpdf --decrypt input.pdf output.pdf
+Linealizar (Fast Web View): qpdf --linearize input.pdf output.pdf. 
+pikepdf Documentation
+pikepdf Documentation
+2. OCRmyPDF: Para búsqueda y escaneos
+Si tienes un PDF que es solo una imagen y quieres que el texto sea seleccionable (OCR), OCRmyPDF es el estándar de oro en Linux. 
+PyPI
+PyPI
+ +1
+Instalación: sudo pacman -S ocrmypdf
+Hacer que un PDF sea buscable: ocrmypdf input.pdf output.pdf
+Optimizar y limpiar escaneos: ocrmypdf --optimize 3 --deskew input.pdf output.pdf
+3. img2pdf: La mejor conversión de imagen a PDF 
+Como mencionamos antes, img2pdf es superior a cualquier otra herramienta porque no re-codifica la imagen, manteniendo la calidad original exacta. 
+ArchWiki
+ArchWiki
+ +1
+Instalación: sudo pacman -S img2pdf
+Uso: img2pdf *.jpg -o portfolio.pdf 
+Mención especial: Stirling-PDF (Auto-hospedado)
+Si realmente extrañas la interfaz de iLovePDF pero quieres privacidad total y usarlo localmente, Stirling-PDF es la alternativa definitiva. Es un servidor web local que incluye todas las herramientas de iLovePDF (unir, dividir, OCR, rotar, marcas de agua, reparar, etc.). 
+YouTube
+YouTube
+ +2
+En Arch: Puedes instalarlo vía Docker para mantenerlo aislado de tu sistema principal.
+bash
+docker run -d -p 8080:8080 --name stirling-pdf frooodle/s-pdf:latest
+Usa el código con precaución.
+Luego solo entras a localhost:8080 en tu navegador. 
+YouTube
+YouTube
+ +1
+¿Te gustaría que te ayude a crear un script de Bash o un alias para que alguno de estos procesos sea más rápido de ejecutar?

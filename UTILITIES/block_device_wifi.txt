@@ -1,0 +1,39 @@
+# USING bettercap package
+# Inicia el escaneo de red
+net.probe on
+# Lista los dispositivos y busca la IP del teléfono
+net.show
+# Configura el objetivo y bloquea (sin reenviar paquetes)
+set arp.spoof.targets [IP_del_teléfono]
+set arp.spoof.fullduplex true
+arp.spoof on
+
+
+Sí, un ESP32 puede realizar ataques de deautenticación (expulsar dispositivos) de manera muy efectiva, pero tiene limitaciones importantes comparado con usar tu laptop con una tarjeta en modo monitor.
+## 1. ¿Cómo funciona en un ESP32?
+A diferencia de las laptops, el ESP32 no usa un "modo monitor" estándar de Linux. En su lugar, utiliza librerías de bajo nivel para inyectar paquetes directamente en el aire. Existen proyectos famosos como:
+
+* [ESP32 Marauder](https://github.com/justcallmekoko/ESP32Marauder): Es la herramienta más completa. Permite escanear redes, seleccionar objetivos y lanzar ataques de deautenticación (DoS), spam de beacons y captura de handshakes.
+* ESP32 Wi-Fi Penetration Tool: Enfocado en automatizar el proceso de obtener handshakes para luego crackearlos en PC. [1]
+
+## 2. Ventajas vs. Laptop
+
+* Independencia total: Al ser un microcontrolador, puedes dejar el ESP32 escondido o alimentado por una batería pequeña funcionando las 24 horas mientras tú sigues navegando normalmente en tu laptop.
+* Costo y tamaño: Es extremadamente barato (aprox. $5-10 USD) y cabe en la palma de tu mano.
+* Sin conflictos de drivers: No tienes que preocuparte por si el kernel de Linux reconoce tu tarjeta USB; el ESP32 ya viene con el hardware de radio integrado y listo para inyectar paquetes. [2, 3]
+
+## 3. Limitaciones críticas
+
+* Solo 2.4 GHz: La gran mayoría de los modelos (como el ESP32-WROOM) solo operan en la banda de 2.4 GHz. Si el teléfono que quieres bloquear está conectado a la red de 5 GHz, el ESP32 no podrá ni verlo ni expulsarlo.
+* Nota: Solo modelos muy recientes como el ESP32-C5 soportan 5 GHz, pero el soporte de software para ataques aún es limitado.
+* No es infalible contra WPA3: Al igual que con los otros métodos, si el router tiene activado 802.11w (Protected Management Frames), el ataque de deautenticación no funcionará porque los paquetes de desconexión van cifrados.
+
+## ¿Vale la pena?
+Si el objetivo está en una red de 2.4 GHz, es la mejor opción para "bloquear" sin sacrificar tu propia navegación. Solo necesitas flashear el firmware (como Marauder) y controlarlo desde una interfaz web o serial.
+¿Te interesa que te explique cómo flashear el firmware Marauder en un ESP32 o prefieres seguir con la idea de la tarjeta Wi-Fi USB?
+
+[1] [https://www.youtube.com](https://www.youtube.com/watch?v=lcokJQMivwY#:~:text=This%20video%20explains%20the%20process%20of%20constructing,necessary%20steps%20and%20required%20materials%20are%20demonstrated.)
+[2] [https://hackaday.com](https://hackaday.com/2021/05/27/wifi-penetration-testing-with-an-esp32/)
+[3] [https://www.ijisrt.com](https://www.ijisrt.com/assets/upload/files/IJISRT25MAR337.pdf)
+
+https://www.mercadolibre.com.mx/adaptador-wifi-usb-inalambrico-ar9271-24g150mbps-for-rl/p/MLM2047942273?matt_tool=28238160&utm_source=google_shopping&utm_medium=organic&pdp_filters=item_id%3AMLM2781733557&from=gsho

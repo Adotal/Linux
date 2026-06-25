@@ -1,0 +1,106 @@
+(Linux, Apache, MySQL, PHP) NO XAMPP
+
+// Install
+$ sudo pacman -S apache mariadb php php-apache
+
+// Initialize the database directory:
+$ sudo mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+// Start and enable the service
+$ sudo systemctl enable --now mariadb
+
+// Secure your MariaDB installation
+$ sudo mariadb-secure-installation
+
+    -   password: enter (empty)
+    -   change root password: no
+    -   unix_socekt: no
+    -   remove anonymus users: yes
+    -   disallow remote login: yes
+    -   remove test db: yes
+    -   reload privileged tables: yes
+
+// view status
+$ sudo systemctl status mariadb
+
+// Access db
+$ sudo mysql -u root
+
+// Edit Configuration: Edit /etc/httpd/conf/httpd.conf to enable PHP.
+$ sudo vim /etc/httpd/conf/httpd.conf
+
+    -   comment:    LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+    -   uncomment:   LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+    -   ensure this line exits (end of LoadModule list):
+            LoadModule php_module modules/libphp.so   
+            AddHandler php-script .php
+    -   paste at end:
+
+
+// Web files will live in /srv/http/. Set your user as the owner to avoid using sudo for every file change:
+$ sudo chown -R $USER:$USER /srv/http/
+
+// Create test file
+$ echo "<?php phpinfo(); ?>" > /srv/http/info.php
+
+// phpmyadmin
+sudo pacman -S phpmyadmin php-gd
+
+Debes habilitar algunas extensiones en tu archivo php.ini para que phpMyAdmin funcione correctamente:
+Abre el archivo: sudo nano /etc/php/php.ini
+Busca y descomenta (quita el ; al inicio) las siguientes líneas:
+extension=bz2
+extension=iconv
+extension=mysqli
+extension=pdo_mysql
+extension=gettext
+3. Configurar Apache para reconocer phpMyAdmin
+Tienes que decirle a Apache dónde encontrar los archivos de phpMyAdmin. La forma más limpia es crear un archivo de configuración separado:
+Crea el archivo de configuración:
+bash
+sudo nano /etc/httpd/conf/extra/phpmyadmin.conf
+Usa el código con precaución.
+
+Pega el siguiente contenido dentro:
+apache
+Alias /phpmyadmin "/usr/share/webapps/phpMyAdmin"
+<Directory "/usr/share/webapps/phpMyAdmin">
+    DirectoryIndex index.php
+    AllowOverride All
+    Options FollowSymlinks
+    Require all granted
+</Directory>
+Usa el código con precaución.
+
+Ahora, dile a Apache que cargue ese archivo. Abre /etc/httpd/conf/httpd.conf:
+bash
+sudo nano /etc/httpd/conf/httpd.conf
+Usa el código con precaución.
+
+Ve al final del archivo y añade esta línea:
+apache
+Include conf/extra/phpmyadmin.conf
+Usa el código con precaución.
+
+4. Reiniciar Apache
+Para que todos los cambios surtan efecto, reinicia el servicio:
+bash
+sudo systemctl restart httpd
+
+Tip de seguridad (Solución al error de "Access Denied")
+En Arch Linux, por defecto MariaDB usa el plugin unix_socket para el root, lo que significa que solo puedes entrar desde la terminal con sudo. Para entrar a phpMyAdmin como root, debes cambiar el método de autenticación:
+Entra a MariaDB desde la terminal: sudo mariadb
+Ejecuta estos comandos:
+sql
+ALTER USER 'root'@'localhost' IDENTIFIED VIA mysql_native_password USING PASSWORD('12345');
+FLUSH PRIVILEGES;
+EXIT;
+
+
+FINAL QICK Start
+sudo systemctl start httpd
+sudo systemctl start mariadb
+
+&&
+sudo systemctl enable httpd
+sudo systemctl enable mariadb

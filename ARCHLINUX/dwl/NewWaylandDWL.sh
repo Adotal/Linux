@@ -74,3 +74,14 @@ xdg-mime query filetype Images/Image.png
 xdg-mime default swayimg.desktop image/jpeg image/png image/gif image/webp image/bmp
 # zathura file name with ls /usr/share/applications/ | grep zathura
 xdg-mime default org.pwmt.zathura.desktop application/pdf
+
+# DWL WALLPAPER
+bash_profile.sh:
+# while true; do
+#	dwl -s ./start-dwl.sh
+# done
+~/start-dwl.sh
+# swaybg -i ~/Downloads/ArchwallpaperWindows.png -m fill &
+
+# MANUALLY
+$ swaybg -i /ruta/a/tu/imagen.jpg -m fill

@@ -49,13 +49,20 @@ $ git merge
 -See branch
 $ git branch 
 
+-Create branch
+$ git branch name_of_branch
+
 -Create and change branch
 $ git checkout -b name_of_branch
 
 // Is the same: $ git branch name_of_branch; git checkout name_of_branch
 
--Merge a branch on master
+-Merge a branch on master (main)
+$ git checkout main
 $ git merge name_of_branch
+
+-Delete branch
+$ git branch -d name_of_branch
 
 -Upload changes
 $ git branch -M main
@@ -75,3 +82,20 @@ $ git push -u name_of_branch
 2. git add a.txt
 3. git commit -m "Message_to_coworkers"
 4. git push
+
+-Downlaod chenges without merge nor rebase
+$ git fetch --all
+
+-INIT WITH LICENSE
+git pull origin main --rebase
+
+-Fix email in commit
+git commit --amend --author="Nombre <nuevo-email@ejemplo.com>" --no-edit
+
+-Fetch remote branch
+git fetch origin
+git checkout -b <nombre-de-la-rama> origin/<nombre-de-la-rama>
+
+
+-ADD ALL CURRENT .gitignore files with folder name to ../.gitignore
+$ cat .gitignore | sed "s|^|$(basename $(pwd))/|" >> ../.gitignore

@@ -1,0 +1,13 @@
+
+// Know what filetype is:
+$ xdg-mime query filetype man_green_phone.svg 
+R: image/svg+xml
+
+Set default:
+$ xdg-mime default [app-name].desktop [mime-type] 
+
+(e.g., xdg-mime default org.gnome.Evince.desktop application/pdf).
+
+Check current default:
+$ xdg-mime query default [mime-type] 
+(e.g., xdg-mime query default application/pdf)
