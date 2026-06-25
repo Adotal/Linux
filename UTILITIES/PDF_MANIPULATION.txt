@@ -49,6 +49,17 @@ $ ocrmypdf --optimize 3 --deskew input.pdf output.pdf
 3. img2pdf
 img2pdf is superior to any other tool because it does not re-encode the image, maintaining the exact original quality.
 
-USE
+IMAGE TO PDF
 
 $ img2pdf *.jpg -o portfolio.pdf
+
+SCRIPT TO COMPRESS ALL FILES IN FOLDER WITH GHOSTSCRIPT AND SAVE IN compressed/ 
+
+mkdir -p compressed
+for file in *.pdf
+do
+  echo "Processing: $file"
+  qpdf --compress-streams=y --recompress-flate --optimize-images "$file" "compressed/$file"
+# gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="compressed/$file" "$file"
+done
+

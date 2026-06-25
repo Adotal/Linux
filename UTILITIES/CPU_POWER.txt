@@ -1,0 +1,14 @@
+
+This file contains information to limit cpu frequency, saving battery by decreasing power consuption and decreasing thermal CPU heating
+
+CHECK CURRENT CPU MAX FREQUENCY VALUE
+
+$ cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 
+
+CHECK REAL TIME CPU CORES FREQUENCY
+
+$ watch -n 1 grep "MHz" /proc/cpuinfo
+
+SET A NEW MAX CPU FREQUENCY VALUE
+
+$ sudo cpupower frequency-set -u 2GHz
