@@ -1,0 +1,79 @@
+---------MODERN INSTALLATION ARCH LINUX----------
+
+/*
+	NEW FEATURES:
+	BTFRS
+	NO SWAP (UNLESS A FILE)
+	NO ZRAM (UNLESS LESS THAN 16GB RAM)
+	ONLY 2 PARTITIONS
+	NVME & SSD Optimization
+	ONLY UEFI-GPT
+	systemd-boot instead of GRUB
+	Wayland INSTEAD of Xorg (X11)
+	linux-zen for Ryzen
+
+	Actually optimized for my personal hardware:
+	Ryzen 5 5675U, 16GB RAM, 256GB NVME (dual boot Win 11)
+
+*/
+
+//////////////////FLOW///////////////
+
+1. CONNECT TO INTERNET
+	AS BEFORE (NO CHANGES)
+
+2. Partition
+// Boot 500 MB (EFI FAT32) p1
+// Root All the rest (Linux type) p2
+
+3. Format partition and mount
+
+mfs.btrfs /dev/nvme0n1p1
+mount /dev/nvme0n1p2 /mnt
+
+4. CREATE SUBVOLUMNES and unomunt
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+
+unmount /mnt
+
+5. OPTIMIZATION OPTIONS
+/*
+	noatime
+	compress=zstd:1
+	space_cache=v2
+	discard=async
+*/
+
+mount -o noatime,compress=zstd:1,space_cache=v2,discard=async,subvol=@ /dev/nvme01np2 /mnt
+mkdir /mnt/home
+mount -o noatime,compress=zstd:1,space_cache=v2,discard=async,subvol=@home /dev/nvme01np2 /mnt/home
+
+
+6. MOUNT EFI
+mkdir -p /mnt/efi
+mount -o fmask=0077,dmask=077 /mnt/efi
+
+7. Install
+
+packstrap -K /mnt linux-zen linux-firmware base base-devel
+amd-ucode btrfs-progs git vim networkmanager libva-mesa-driver mesa vulkan-radeon mesa-utils
+grub efibootmgr mkinitcpio grub-btrfs zsh 
+
+8. Fstab andc chroot
+
+9. Keyboard and tty map
+
+
+10. Hostname
+
+
+11. Locales
+
+
+12. ADD a user
+
+Add user to sudo file
+
+13. systemd-boot
+
