@@ -1,0 +1,32 @@
+
+1. imgagemagick
+
+MAXIMUM ALMOST LOSSLESS JPEG COMPRESSION
+$ magick input.jpg -sampling-factor 4:2:0 -strip -quality 80 -interlace Plane output.jpg
+
+SINGLE JPEG COMPRESSION:
+quality of 50 is sometimes acceptable value
+$ magick input.jpg -strip -quality 85 output.jpg
+
+
+SIMPLE PNG COMPRESSION:
+
+$ magick input.png -colors 255 output.png
+
+COMPRESS ALL IMAGES IN FILE
+
+$ for file in *.{jpg,png,jpeg}; do magick "$file" -quality 80 "$file"; done
+
+LOSSLESS (KEEP QUALITY, OPTIMIZE FILE STRUCTURE):
+
+$ magick input.png -define png:compression-level=9 output.png
+
+LOSSY (DRASTIC SIZE REDUCTION):
+
+$ magick input.png -colors 256 output.png
+
+COMPRESS ALL IN FOLDERS AND SUBFOLDERS. (OVERRIDE ORIGINALS)
+find . -name "*.jpg" -exec mogrify -strip -interlace Plane -sampling-factor 4:2:0 -quality 85% {} \;
+
+THIS COMMAND COMPRESSES A PNG WITH NO VISIBLE LOSS OF QUALITY
+mogrify -filter Triangle -define filter:support=2 -unsharp 0.25x0.08+8.3+0.045 -dither None -posterize 136 -quality 82 -define png:compression-filter=5 -define png:compression-level=9 -define png:compression-strategy=1 -define png:exclude-chunk=all -interlace none -colorspace sRGB *.png

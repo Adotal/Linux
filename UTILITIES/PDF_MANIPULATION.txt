@@ -19,6 +19,11 @@ COMPRESS PDF
 
 $ qpdf --compress-streams=y --recompress-flate --optimize-images input.pdf output.pdf
 
+EXTREME COMPRESSION
+
+$ qpdf --compress-streams=y --decode-level=generalized --recompress-flate --compression-level=9 --optimize-images --object-streams=generate input.pdf output.pdf
+
+
 MERGE FILES
 
 $ qpdf --empty --pages file1.pdf file2.pdf -- output.pdf
@@ -52,14 +57,4 @@ img2pdf is superior to any other tool because it does not re-encode the image, m
 IMAGE TO PDF
 
 $ img2pdf *.jpg -o portfolio.pdf
-
-SCRIPT TO COMPRESS ALL FILES IN FOLDER WITH GHOSTSCRIPT AND SAVE IN compressed/ 
-
-mkdir -p compressed
-for file in *.pdf
-do
-  echo "Processing: $file"
-  qpdf --compress-streams=y --recompress-flate --optimize-images "$file" "compressed/$file"
-# gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile="compressed/$file" "$file"
-done
 
