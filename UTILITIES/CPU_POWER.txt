@@ -1,4 +1,10 @@
 
+CPU PERFORMANCE
+
+The Linux kernel offers CPU performance scaling via the CPUFreq subsystem, which defines two layers of abstraction:
+Scaling governors - Algorithms to compute frequency (normally based on workload)
+Scaling drivers - Apply desired governor's frequency directly on CPU
+
 This file contains information to limit cpu frequency, saving battery by decreasing power consuption and decreasing thermal CPU heating
 
 CHECK CURRENT CPU MAX FREQUENCY VALUE
@@ -9,6 +15,28 @@ CHECK REAL TIME CPU CORES FREQUENCY
 
 $ watch -n 1 grep "MHz" /proc/cpuinfo
 
-SET A NEW MAX CPU FREQUENCY VALUE
+TO SET THE MAXIMUM CLOCK FREQUENCY (CLOCK_FREQ IS A CLOCK FREQUENCY WITH UNITS: GHZ, MHZ):
 
-$ sudo cpupower frequency-set -u 2GHz
+# cpupower frequency-set -u clock_freq
+
+TO SET THE MINIMUM CLOCK FREQUENCY:
+
+# cpupower frequency-set -d clock_freq
+
+	- To adjust for only a single CPU core, append -c core_number.
+	- The governor, maximum and minimum frequencies can be set in /etc/default/cpupower.
+
+CONFIGURING FREQUENCY BOOSTING
+Some processors support raising their frequency above the normal maximum for a short burst of time.
+
+To disable boosting, run:
+
+# echo 0 > /sys/devices/system/cpu/cpufreq/boost
+
+To enable boosting, run:
+
+# echo 1 > /sys/devices/system/cpu/cpufreq/boost
+
+
+Retrieved from
+ArchWiki. (2026). CPU frequency scaling. Arch Linux. https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_drivers
