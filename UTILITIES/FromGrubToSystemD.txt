@@ -1,0 +1,62 @@
+// System-d instead of GRUB
+
+- Installed systemd-boot as root using: (IF INSTALLED IN /efi copy linux, ucode AND initr TO THAT PATH)
+
+bootctl install
+
+- Install vim so we can edit conf files. 
+
+pacman -S vim
+- Configure loader.conf file:
+
+vim /boot/loader/loader.conf
+- The default contents of loader.conf:
+
+#timeout 3
+default 43l34jkl32j4lk32
+just blank that out and type:
+
+default arch 
+timeout 3
+
+Create arch.conf:
+
+vim /boot/loader/entries/arch.conf
+This will create arch.conf. Add the following contents:
+
+----------MY CONFIG-----
+title	ArchLinux
+linux	/vmlinuz-linux-zen
+initrd	/amd-ucode.img
+initrd	/initramfs-linux-zen.img
+options root=PARTUUID="de96f85a-f06c-452d-905b-710196689888" rootflags=subvol=@ rw
+
+
+You can get your PARTUUID by reading in blkid via vim.
+:r !blkid
+
+!! IMPORTANT: GENERATE INITCPIOS
+# mkinitcpio -P
+
+---THE INITCPIOS MUST BE IN THE SAME PARTITION THAN loader/, its possible to
+copy them using a deamon or manually every time mkinitcpio is executed----
+
+AUTO UPDATE:
+# systemctl enable systemd-boot-update.service
+
+Uninstall GRUB with:
+# pacman -Rcnsu grub
+
+-------ADD WINDOWS ON ANOTHER PARTITION------
+1. Mount Windows's EFI part in /mnt 
+2. cp -Rv /mnt/EFI/Microsoft to /efi/EFI o /boot/EFI
+3. Add entry for vim /efi/loader/entries/windows11.conf:
+title	Windows11
+efi	/efi/EFI/Microsoft/Boot/bootmgfw.efi
+
+4. Check entries recognized with
+bootctl list 
+
+
+
+

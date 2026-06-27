@@ -1,0 +1,9 @@
+// HiddenNetworkNMCLI
+
+nmcli c add type wifi con-name <connect name> ifname wlan0 ssid <ssid>
+nmcli con modify <connect name> wifi-sec.key-mgmt wpa-psk
+nmcli con modify <connect name> wifi-sec.psk <password>
+nmcli con up <connect name>
+If we dont need the connection anymore:
+
+nmcli c delete <connect name>

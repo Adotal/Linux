@@ -1,0 +1,108 @@
+
+COMPRESSION COMANDS
+
+--------------------TAR & GZ-----------------------------
+
+UNCOMPRESS
+tar -xvfz
+
+-------------------- 7z ----------------------------------
+
+7z is a perfect option of compression tool, it doesn't save metadata
+
+It forces the LZMA2 algorithm to use massive memory dictionaries and enables "solid" archiving (analyzing files together rather than individually).
+
+HIGHEST LOSSLESS COMPRESSION
+
+$ 7z a -t7z -m0=lzma2 -mx=9 -mfb=273 -md=1024m -ms=on archive.7z /path/to/target
+
+BREACKDOWN
+    -mx=9: Ultra compression level.
+
+    -mfb=273: Maxes out "fast bytes" (match length finder) to its technical limit.
+
+    -md=1024m: Sets a 1GB dictionary size (Warning: requires ~10GB of RAM to compress!).
+
+    -ms=on: Turns on Solid mode, which massively reduces size if you have many similar files.
+
+
+2. XZ
+
+USING TAR: When metadata or linux permissions is an important feature to save, TAR with XZ is the best compression option
+
+Like 7-Zip, xz natively uses the LZMA2 algorithm. By default, xz is single-threaded and capped. To push it to 7z-level limits while leveraging your multi-core CPU use:
+
+$ tar -I 'xz --lzma2=dict=1024MiB,mf=bt4,nice=273,depth=512 --threads=0' -cvf archive.tar.xz /path/to/target
+
+BREAKDOWN
+    -I: Tells tar to use a custom compression program stream.
+
+    dict=1024MiB: Sets a 1GB LZMA2 dictionary (matches your 7z settings).
+
+    mf=bt4: Uses a 4-byte Binary Tree match finder for deepest analysis.
+
+    nice=273: Sets the nice match length to maximum.
+
+    --threads=0: Uses all available CPU cores (Crucial, because xz -9 normally only uses 1 core).
+
+SHORTAND ALTERNATIVE
+The standard maximum is 
+
+tar -I 'xz -9e -T0' -cvf archive.tar.xz /path/to/target
+
+( -e means "extreme").
+
+3. GZIP (gzip / "gx") — The High-Speed Classic
+
+Standard gzip uses the older Deflate algorithm. It is fast, but doesn't compress as tightly as LZMA2. To maximize standard gzip across all CPU cores, use pigz (Parallel GZIP):
+
+$ tar -I 'pigz -9' -cvf archive.tar.gz /path/to/target
+
+    -9: Extreme compression mode for Deflate.
+
+The Secret "Max Gzip" Weapon: Zopfli
+
+If your goal is the absolute smallest .gz file possible (100% compatible with standard gzip but with 5% better compression than gzip -9), use Zopfli. It is incredibly slow but mathematically optimal:
+Bash
+
+tar -cvf - /path/to/target | zopfli --i100 > archive.tar.gz
+
+    --i100: Runs 100 compression iterations to squeeze out every single byte.
+
+4. ZIP (zip) — Cross-Platform Standard
+
+Traditional Linux zip doesn't have a solid-archiving mode, making it less efficient for folders with repetitive data. However, you can strip unnecessary file metadata to save space:
+Bash
+
+zip -9 -X -r archive.zip /path/to/target
+
+    -9: Tells the Deflate engine to work its hardest.
+
+    -X: Strips extra file attributes (like Linux UID/GID data and extended timestamps) which saves overhead bytes.
+
+7-Zip Backed ZIP (Better Alternative)
+
+If you want a .zip file format but want it packed with advanced algorithms like LZMA, use 7z to build it:
+Bash
+
+7z a -tzip -mm=lzma -mx=9 archive.zip /path/to/target
+
+5. Bonus: Zstandard (zstd) — The Modern Standard
+
+While not explicitly on your list, no modern Linux compression conversation is complete without Zstandard (zstd). Developed by Facebook, it matches xz compression ratios at ultra settings but decompresses significantly faster.
+Bash
+
+tar -I 'zstd --ultra -22 -T0' -cvf archive.tar.zst /path/to/target
+
+    --ultra -22: Unlocks the hidden, extreme compression levels (levels 20-22).
+
+    -T0: Spawns compression threads matching your total CPU core count.
+
+Quick Comparison Matrix
+Tool		Algorithm	Compression Ratio	Compression Speed	RAM Required (Max Settings)
+7z (Ultra)	LZMA2		Extreme	Very 		Slow	~10 GB
+XZ (Ultra)	LZMA2		Extreme	Very 		Slow	~10 GB
+Zstd (--ultra -22)	Huff0/FSE	High		Medium	~2.5 GB
+Gzip / Pigz (-9)	Deflate	Moderate	Fast	Minimal
+Zopfli	Deflate	Moderate-High	Intensely Slow	Minimal
+

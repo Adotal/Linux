@@ -1,0 +1,60 @@
+0. GhostScript
+COMPRESS PDF
+
+$ gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=output.pdf input.pdf
+
+Summary of -dPDFSETTINGS:
+
+    /screen		- lower quality, smaller size. (72 dpi)
+    /ebook		- for better quality, but slightly larger pdfs. (150 dpi)
+    /prepress	- output similar to Acrobat Distiller "Prepress Optimized" setting (300 dpi)
+    /printer 	- selects output similar to the Acrobat Distiller "Print Optimized" setting (300 dpi)
+    /default 	- selects output intended to be useful across a wide variety of uses, possibly at the expense of a larger output file
+
+1. qpdf
+
+It is probably the most robust tool for transforming PDFs without losing quality. qpdf is ideal for merging, splitting, encrypting, and optimizing files.
+
+COMPRESS PDF
+
+$ qpdf --compress-streams=y --recompress-flate --optimize-images input.pdf output.pdf
+
+EXTREME COMPRESSION
+
+$ qpdf --compress-streams=y --decode-level=generalized --recompress-flate --compression-level=9 --optimize-images --object-streams=generate input.pdf output.pdf
+
+
+MERGE FILES
+
+$ qpdf --empty --pages file1.pdf file2.pdf -- output.pdf
+
+SPLIT FILES (extract oages 1-5):
+
+$ qpdf input.pdf --pages . 1-5 -- output.pdf
+
+DELETE PASSWORD
+
+$ qpdf --decrypt input.pdf output.pdf
+
+LINEARIZE (fast web-view)
+
+$ qpdf --linearize input.pdf output.pdf. 
+
+2. OCRmyPDF
+If you have a PDF that is just an image and you want the text to be selectable (OCR), OCRmyPDF is the gold standard on Linux.
+
+MAKE PDF SEARCHABLE
+
+$ ocrmypdf input.pdf output.pdf
+
+OPTIMIZE AND CLEAN SCANS
+
+$ ocrmypdf --optimize 3 --deskew input.pdf output.pdf
+
+3. img2pdf
+img2pdf is superior to any other tool because it does not re-encode the image, maintaining the exact original quality.
+
+IMAGE TO PDF
+
+$ img2pdf *.jpg -o portfolio.pdf
+
