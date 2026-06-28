@@ -35,14 +35,18 @@ TO SET THE MINIMUM CLOCK FREQUENCY:
 CONFIGURING FREQUENCY BOOSTING
 Some processors support raising their frequency above the normal maximum for a short burst of time.
 
-To disable boosting, run:
+TO DISABLE BOOSTING, RUN:
 
 # echo 0 > /sys/devices/system/cpu/cpufreq/boost
 
-To enable boosting, run:
+TO ENABLE BOOSTING, RUN:
 
 # echo 1 > /sys/devices/system/cpu/cpufreq/boost
 
+SET A POWER GOVERNOR
+When cpupower frequency-info is executed, it shows which governors are available and which is the current set
+
+# cpupower frequency-set -g performance
 
 Retrieved from
 ArchWiki. (2026). CPU frequency scaling. Arch Linux. https://wiki.archlinux.org/title/CPU_frequency_scaling#Scaling_drivers
